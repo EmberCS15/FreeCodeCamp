@@ -1,0 +1,27 @@
+.allhead{
+	text-align:center;
+	font-family:'Tangerine', serif;
+	font-size:600%;
+}
+.main-quote{
+	position: relative;
+	/*border:2px solid black;*/
+	top:160px;
+}
+.text{
+	font-family: Verdana;
+}
+#quote{
+	box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.7);
+	background-color: white;
+}
+#tweeter{
+	border:2px solid black;
+	border-radius:2px;
+	background-color:black;
+	box-shadow: 2px 2px 4px 1px rgba(0,0,0,0.7);
+}
+.icon{
+	margin:5px;
+	padding:10px;
+}

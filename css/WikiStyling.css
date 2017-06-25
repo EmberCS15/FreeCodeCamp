@@ -1,0 +1,50 @@
+body{
+	background-color:#660066;
+}
+.searchBox{
+	position: absolute;
+	top:40%;
+	left:40%;
+}
+.searchBox img{
+	position: relative;
+	left:30%;
+}
+.searchBox p{
+	color:orange;
+	font-size: 130%;
+	font-family: 'Play' sans-serif;
+}
+#searchField{
+	position:relative;
+	left:-15%;
+	width:130%;
+	border-radius:20px;
+	background-color: orange;
+	padding:10px;
+}
+#wikiDiv{
+	position:absolute;
+	top:40%;
+	left:2%;
+	max-width:940px;
+}
+#wikiDiv a{
+	text-decoration: none;
+}
+.wiki{
+	margin-top:5px;
+	border-left:5px solid orange;
+	background-color:#e6e6e6;
+	transition:0.5s;
+	padding:10px;
+	color:black;
+	text-decoration:none;
+}
+.wiki:hover{
+	transform: scale(1.03,1.03);
+}
+.wikiText{
+	font-family: Courier;
+	font-size:110%;
+}

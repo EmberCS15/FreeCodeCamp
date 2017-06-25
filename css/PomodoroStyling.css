@@ -1,0 +1,68 @@
+#allhead{
+	text-align: center;
+	font-family: 'Mogra', cursive;
+	font-size: 300%;
+	color:white;
+}
+
+div{
+	color:white;
+}
+.btn{
+	background-color:inherit;
+	font-size: 150%;
+	color:white;
+}
+.btn:hover{
+	color:white;
+}
+#session{
+	font-size: 300%;
+}
+
+#break{
+	font-size: 300%;
+}
+.timer {
+	margin: 0 auto;
+	text-align: center;
+	width: 300px;
+	height: 300px;
+	font-size: 4em;
+	border: 6px solid #99CC00;
+	border-radius: 50%;
+	cursor: pointer;
+	position: relative;
+	z-index: 20;
+	overflow: hidden;
+}
+.text{
+	font-family:'Orbitron', sans-serif;
+	font-size: 90%;
+	position: absolute;
+	color:white;
+	top:20%;
+	width:100%;
+	text-align: center;
+}
+#dytimer{
+	position: absolute;
+	color:white;
+	font-size: 100%;
+	width:100%;
+	top:40%;
+	text-align: center;
+	font-family:'Orbitron', sans-serif;
+}
+#timefill{
+	content:'';
+	/*display: inline-block;*/
+	position:absolute;
+	/*top:98%;*/
+	bottom: 0;
+    right: 0;
+    left: 0;
+    height:0%; 
+	background-color:#99CC00;
+	z-index:-1;
+}
