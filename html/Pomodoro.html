@@ -1,0 +1,206 @@
+<html>
+<head>
+  	<title>Pomodoro Clock</title>
+  	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine|Exo+2|Orbitron|Mogra" />
+	<link rel="stylesheet" href="../css/PomodoroStyling.css" />
+</head>
+<body style="background-color: #333333;">
+<h1 id="allhead">FreeCodeCamp : Pomodoro Clock</h1>
+<br><br><br><br>
+<div class="row">
+	<div class="container-fluid">
+		<center>
+		<div class="col-md-2 col-md-offset-3">
+			<p>BREAK LENGTH</p><br>
+			<button type="button" class="btn btn-inverse plus">+</button>
+			<span id="break">5</span>
+			<button type="button" class="btn btn-inverse minus">-</button>
+		</div>
+		<div class="col-md-2 col-md-offset-2">
+			<p>SESSION LENGTH</p><br>
+			<button type="button" class="btn btn-inverse splus">+</button>
+			<span id="session">25</span>
+			<button type="button" class="btn btn-inverse sminus">-</button>
+		</div>
+		</center>
+	</div>
+</div>
+<br><br><br>
+<div class="row">
+	<div class="container-fluid timercon">
+		<center>
+			<div class="timer">
+				<p class="text">Session</p>
+				<p id="dytimer">25</p>
+				<span id="timefill"></span> 
+			</div>
+		</center>
+	</div>
+</div>
+<script type="text/javascript">
+var bk = 5;
+var ss = 25; 
+var curr = ss;
+var mode = 0;
+var obj=null;
+var height = 0;
+var sincrement = 0;
+var bincrement = 0;
+var cincrement = 0;
+var flag=0;
+var Timer = function()
+{        
+    // Property: Frequency of elapse event of the timer in millisecond
+    this.Interval = 1000;
+    this.hour = 0;
+    this.minute = 0;
+    this.second = 0;
+    // Property: Whether the timer is enable or not
+    this.Enable = new Boolean(false);
+    
+    // Event: Timer tick
+    this.Tick;
+    
+    // Member variable: Hold interval id of the timer
+    var timerId = 0;
+    
+    // Member variable: Hold instance of this class
+    var thisObject;
+    
+    // Function: Start the timer
+    this.Start = function()
+    {
+        this.Enable = new Boolean(true);
+
+        thisObject = this;
+        if (thisObject.Enable)
+        {
+            thisObject.timerId = setInterval(
+            function()
+            {
+                thisObject.Tick(); 
+            }, thisObject.Interval);
+        }
+    };
+    
+    // Function: Stops the timer
+    this.Stop = function()
+    {            
+        thisObject.Enable = new Boolean(false);
+        clearInterval(thisObject.timerId);
+    };
+
+};
+
+$(document).ready(function(){
+	$(".plus").on("click",function(){
+		var time = parseInt($("#break").text());
+		time+=1;
+		$("#break").text(time);
+		bk=time;
+	});
+	$(".minus").on("click",function(){
+		var time = parseInt($("#break").text());
+		time-=1;
+		if(time<=0)
+			time=1;
+		bk=time;
+		$("#break").text(time);
+	});
+	$(".splus").on("click",function(){
+		var time = parseInt($("#session").text());
+		time+=1;
+		ss=time;
+		$("#session").text(time);
+		$("#dytimer").text(time);
+	});
+	$(".sminus").on("click",function(){
+		var time = parseInt($("#session").text());
+		time-=1;
+		if(time<=0)
+			time=1;
+		ss=time;
+		$("#session").text(time);
+		$("#dytimer").text(time);
+	});
+	$(".timer").click(function(){
+		console.log("Click Detected");
+		if(mode == 0){
+		sincrement = 100/(ss*60);
+		bincrement = 100/(bk*60);
+		console.log(sincrement+" "+bincrement);
+		cincrement = sincrement;
+		mode=1;	
+		obj = new Timer();
+		obj.Interval = 1000;
+		curr=ss;
+		obj.hour = Math.floor(curr/60);
+		obj.minute = curr%60;
+		obj.second = 0;
+		curr=bk;
+		obj.Tick = function(){
+			if(obj.hour === 0 && obj.minute === 0 &&obj.second == 0){
+				obj.hour = Math.floor(curr/60);
+				obj.minute = curr%60;
+				obj.second = 0;
+				flag++;
+				if(curr === bk && flag%2!=0){
+					$(".text").text("Break!");
+					curr = ss;
+					cincrement=bincrement;
+					height=0;
+					$("#timefill").css("height",height+"%");
+					$(".timer").css("border-color","#ff4d4d");
+					$("#timefill").css("background-color","#ff4d4d");
+				}else{
+					$(".text").text("Session");
+					curr = bk;
+					cincrement=sincrement;
+					height=0;
+					$("#timefill").css("height",height+"%");
+					$(".timer").css("border-color","#99CC00");
+					$("#timefill").css("background-color","#99CC00");
+				}
+			}
+			if(obj.second == 0){
+				obj.second = 60;
+				obj.minute --;
+			}
+			if(obj.minute == 0 && obj.hour!=0){
+				obj.minute = 59;
+				obj.hour -- ; 
+			}
+			obj.second--;
+			var time;
+			var s=(obj.second<10)?"0"+obj.second:""+obj.second;
+			var m=(obj.minute<10)?"0"+obj.minute:""+obj.minute;
+			var h=(obj.hour<10)?"0"+obj.hour:""+obj.hour;
+			if(obj.hour === 0)
+				time = m+":"+s;
+			else time = h+":"+m+":"+s;
+			height+=cincrement;
+			//console.log("The height is :: "+height);	
+			document.getElementById("dytimer").innerHTML = time;
+			$("#timefill").css("height",height+"%");
+		};
+		obj.Start();
+		}
+		else if(mode==1){
+			mode=2;
+			obj.Stop();
+		}
+		else if(mode == 2){
+			mode =1;
+			obj.Start();
+		}
+	});
+});
+</script>
+</body>
+</html>

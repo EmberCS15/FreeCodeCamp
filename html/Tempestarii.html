@@ -1,0 +1,111 @@
+<html>
+<head>
+  	<title>Weather Forecast by Ember</title>
+  	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine|Play" />
+	<link rel="stylesheet" href="../css/WeatherStyling.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css" />
+</head>
+<body>
+<h1 class="allhead">Tempestarii: The Weather Forecaster</h1>
+<h3 class="allhead" style="font-size:200%">Forecast Weather for the Week</h3> 
+<br><br><br><br>
+<div class="temperature">
+	<p class="temp" style="color:red">Temperature : </p>
+	<p style="text-align: center;color:red;"><input type="radio" name="scale" value="F" checked>Fahrenheit&nbsp;&nbsp;&nbsp;<input type="radio" value="C" name="scale">Celsius</p>
+</div>
+<br><br><br><br>
+<div class="weather container">
+	<div class="row">
+		<div class="container fluid">
+			<div class="col-md-3 col-md-offset-1 report country">
+			<h3 style="text-align: center;">Country</h3>
+			</div>
+			<div class="col-md-3 col-md-offset-1 report condition">
+			<h3 style="text-align: center;">Condition</h3>
+			</div>
+			<div class="col-md-3 col-md-offset-1 report range">
+			<h3 style="text-align: center;">Co-ordinates</h3>
+			</div>
+		</div>
+	</div>
+</div>
+<br><br><br>
+<h3 class="allhead" style="font-size:200%;color:red;">Daily Weather Report for next Week</h3> 
+<br>
+<div class="daily_table">
+	<table class="table table-striped">
+		<thead>
+		<tr>
+			<td>Summary</td>
+			<td>Temperature Range</td>
+			<td>Humidity</td>
+			<td>WindSpeed</td>
+			<td>CloudCover</td>
+			<td>Visibility</td>
+		</tr>
+		</thead>
+	</table>
+</div>
+<script>
+$(document).ready(function(){
+	var images={
+		"default":"http://logoinspirations.com/wp-content/uploads/2017/02/2956-x-1958.jpg",
+		"clear-day":"http://i.imgur.com/AJ5sGel.jpg", 
+		"clear-night":"http://i.imgur.com/5wOjGwf.jpg", 
+		"rain":"http://i.imgur.com/PXPJM4M.jpg", 
+		"snow":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5hNGpV6KScfzP_BGTeazXNG6gf-Hm6uk7jK6udw9BbVGZg0oCrw", 
+		"sleet":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5hNGpV6KScfzP_BGTeazXNG6gf-Hm6uk7jK6udw9BbVGZg0oCrw",
+		"wind":"http://i.imgur.com/XKj73je.jpg", 
+		"fog":"https://i.imgur.com/RSAKEAF.jpg",
+		"cloudy":"http://i.imgur.com/DtdQ2rp.jpg",
+		"partly-cloudy-day":"http://i.imgur.com/DtdQ2rp.jpg",
+		"partly-cloudy-night":"http://i.imgur.com/DtdQ2rp.jpg"
+	};
+	$(".allhead").addClass("animated fadeIn");
+	var currScaleTemp = 0;
+	var daily=[];
+	$.ajax({
+		url: "https://crossorigin.me/http://ip-api.com/json",
+		dataType : "json",
+		success : function(json){
+		var lat = ""+json.lat;
+		var lon = ""+json.lon;
+		var curUrl="https://api.darksky.net/forecast/f7fbee8c7d857f7d7b83ede9a74b9900/"+lat+","+lon+"?exclude=minutely,hourly,alerts,flags";
+		console.log(curUrl);
+        $.ajax({
+            url : curUrl,
+            dataType : "jsonp",
+            success : function(parsed_json) {
+            	currScaleTemp = parsed_json.currently.temperature;
+            	$(".temp").html("Temperature : <strong>"+currScaleTemp+"</strong>");
+            	$(".country").append("<p class='box-text'><strong>"+ parsed_json.timezone+"</strong></p>");
+            	$(".condition").append("<p class='box-text'>Summary : <strong>"+ parsed_json.currently.summary+"</strong><br>Wind Speed : <strong>"+ parsed_json.currently.windSpeed +"</strong><br>Cloud Cover : <strong>"+ parsed_json.currently.cloudCover+"</strong></p>");
+            	$(".range").append("<p class='box-text'>Latitude : <strong>"+ lat +"</strong><br>Longitude : <strong>"+ lon +"</strong></p>");
+            	$("body").css("background-image","url('"+images[parsed_json.currently.icon]+"')");
+            	daily = parsed_json.daily.data;
+            	daily.forEach(function(obj){
+            		$("table").append("<tr><td>"+obj.summary+"</td><td>"+obj.temperatureMin+" - "+obj.temperatureMax+"</td><td>"+ obj.humidity+"</td><td>"+ obj.windSpeed+"</td><td>"+obj.cloudCover+"</td><td>"+obj.visibility+"</td></tr>");
+            	});
+        	}
+        });
+	}
+	});
+	$("input[type=radio][name=scale]").change(function(){
+		if(this.value === "F"){
+			currScaleTemp = (9/5)*currScaleTemp+32;
+			$(".temp").html("Temperature : <strong>"+currScaleTemp+"</strong>");
+		}else{
+			currScaleTemp = (5/9)*(currScaleTemp-32);
+			$(".temp").html("Temperature : <strong>"+currScaleTemp+"</strong>");
+		}
+	});
+});
+</script>
+</body>
+</html>

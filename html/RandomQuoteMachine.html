@@ -1,0 +1,82 @@
+<html>
+<head>
+  	<title>Random Quote Machine</title>
+  	<meta charset="UTF-8">
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Tangerine">
+	<link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Play">
+	<link rel="stylesheet" href="../css/MachineStyling.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+<h1 class="allhead">Random Quote Machine</h1>
+<!--<br><br><br><br><br><br><br><br><br><br>-->
+<div class="main-quote container">
+	<div class="row">
+		<div class="container fluid">
+			<div class="col-md-9 col-md-offset-2"> 
+				<blockquote id="quote">
+					<p class="text"></p>
+					<cite class="author"></cite>
+				</blockquote>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="container fluid">
+			<div class="col-md-1 col-md-offset-2">
+				<button class="btn btn-primary newQuote">New Quote</button>
+			</div>
+			<div class="col-md-1 col-md-offset-7">
+				<a id="tweeter" target="_blank"><i class="fa fa-twitter fa-lg icon"></i></a>&nbsp;&nbsp;
+			</div>	
+		</div>
+	</div>
+</div>
+<script>
+$(document).ready(function(){
+	var arrayAnimation=["bounce","fadeIn","shake","tada","flash","pulse","swing"];
+	var images=["yellow","orange","#ffad33","#ff33ff","#79ff4d","#bf8040","#b3ffff","#ffe066"];
+	$.getJSON("https://gist.githubusercontent.com/dmakk767/9375ff01aff76f1788aead1df9a66338/raw/491f8c2e91b7d3b8f1c8230e32d9c9bc1a1adfa6/Quotes.json%2520", function(json) {
+			var rand = Math.floor(Math.random()*(json.length));
+			var anim = Math.floor(Math.random()*arrayAnimation.length);
+			var im=Math.floor(Math.random()*images.length);
+  			$(".text").html(json[rand].quote);
+  			$(".text").animateCss(arrayAnimation[anim]);
+  			$(".author").html("- "+json[rand].name);
+  			$("body").css("background-color",images[im]);
+  			/*$("body").css({"background":"url('"+images[im]+"') no-repeat center center fixed","-webkit-background-size": "cover","-moz-background-size":"cover","-o-background-size":"cover","background-size":"cover"});*/
+    		$('#tweeter').attr('href', '"https://twitter.com/intent/tweet?text=' + json[rand].quote + '" -' + json[rand].name);
+		});
+
+	$(".newQuote").on("click",function(){
+		$.getJSON("https://gist.githubusercontent.com/dmakk767/9375ff01aff76f1788aead1df9a66338/raw/491f8c2e91b7d3b8f1c8230e32d9c9bc1a1adfa6/Quotes.json%2520", function(json) {
+			var rand = Math.floor(Math.random()*(json.length));
+			var anim = Math.floor(Math.random()*arrayAnimation.length);
+			var im=Math.floor(Math.random()*images.length);
+  			$(".text").html(json[rand].quote);
+  			$(".text").animateCss(arrayAnimation[anim]);
+  			$(".author").html("- "+json[rand].name);
+  			$("body").css("background-color",images[im]);
+  			/*$("body").css({"background":"url('"+images[im]+"') no-repeat center center fixed","-webkit-background-size": "cover","-moz-background-size":"cover","-o-background-size":"cover","background-size":"cover"});*/
+    		$('#tweeter').attr('href', 'https://twitter.com/intent/tweet?text="' + json[rand].quote + '" -' + json[rand].name);
+		});
+	});
+
+	$.fn.extend({
+    animateCss: function (animationName) {
+        var animationEnd = 'webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend';
+        this.addClass('animated ' + animationName).one(animationEnd, function() {
+        	$(this).removeClass('animated ' + animationName);
+        });
+    	}
+	});
+});
+</script>
+</body>
+</html>
